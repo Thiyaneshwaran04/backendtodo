@@ -20,22 +20,24 @@ mongoose.connect(dbURI).then((res)=>{
     
 })
 
-const allowedOrigins = ['https://todofullstack.web.app']; // Add your frontend URL here
+// Firebase authentication middleware
+const authMiddleware = async (req, res, next) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+  if (!token) {
+    return res.status(401).send({ error: 'Authentication required' });
+  }
 
-const corsOptions = {
-  origin: function(origin, callback) {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-      callback(null, true); // Allow requests from allowed origins
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow these HTTP methods
-
+  try {
+    const decoded = await admin.auth().verifyIdToken(token);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).send({ error: 'Invalid or expired token' });
+  }
 };
 
-// Enable CORS with options
-app.use(cors(corsOptions));
+// Apply authMiddleware on all routes or specific ones
+app.use(authMiddleware);
 
 app.use(express.json())
 app.use(bodyParser.json());
