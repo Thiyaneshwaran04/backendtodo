@@ -19,11 +19,23 @@ mongoose.connect(dbURI).then((res)=>{
     console.log("error in db ",err);
     
 })
-app.use(cors({
-    origin: "https://todofullstack.web.app/", // Allow only your frontend
-    methods: "GET,POST,PUT,DELETE", // Allowed HTTP methods
-    allowedHeaders: "Content-Type,Authorization", // Allowed headers
-}));
+
+const allowedOrigins = ['https://todofullstack.web.app']; // Add your frontend URL here
+
+const corsOptions = {
+  origin: function(origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true); // Allow requests from allowed origins
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow these HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allow these headers
+};
+
+// Enable CORS with options
+app.use(cors(corsOptions));
 
 app.use(express.json())
 app.use(bodyParser.json());
