@@ -12,7 +12,7 @@ const dbURI="mongodb+srv://thiyaneshwaran123:Thiyanu123@todo.gdeky.mongodb.net/?
 mongoose.connect(dbURI).then((res)=>{
     console.log("running in 2000");
     console.log("connected to db");
-    // app.listen(2000)
+    app.listen(2000)
 
 })
 .catch( (err)=>{
