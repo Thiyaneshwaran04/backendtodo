@@ -4,7 +4,7 @@
       {
         "src": "server.js",
         "use": "@vercel/node",
-          "methods":["GET","POST","PUT","DELETE"]
+          "methods":["GET","POST","PUT","DELETE"],
           "headers":{
               "Access-Control-Allow-Origin":"*"
       },
