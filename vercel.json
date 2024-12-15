@@ -4,7 +4,13 @@
       {
         "src": "server.js",
         "use": "@vercel/node"
-      }
+      },
+        {
+  "functions": {
+    "memory": 1024,
+    "maxDuration": 30
+  }
+}
     ]
   }
   
